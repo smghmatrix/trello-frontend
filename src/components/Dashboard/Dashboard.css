@@ -1,0 +1,81 @@
+/* src/components/Dashboard.css */
+
+body {
+  background: url('/back.jpeg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: row; /* Change to row to place sidebar and main content side by side */
+  margin-bottom:  20px; /* Adjust this based on the height of your navbar */
+  margin-right: 900px;
+  
+}
+
+.sidebar {
+  width: 250px;
+  background: rgba(255, 255, 255, 0.8);
+  color: rgb(0, 0, 0);
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.sidebar h2 {
+  margin: 0;
+  padding: 30px 0;
+  border-bottom: 1px solid #757dbd;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  border-bottom: 1px solid #9690cc;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 80px; /* Add margin to the left to accommodate sidebar */
+}
+
+.templates, .recently-viewed, .your-workspaces {
+  margin-bottom: 20px;
+}
+
+.workspace-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.workspace-card h3 {
+  margin: 0 0 10px 0;
+}
+
+.workspace-card button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  margin-right: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.workspace-card button:hover {
+  background: #b3009b;
+}
+
+.title-workspace {
+  font-weight: 1000;
+}
