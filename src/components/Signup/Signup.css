@@ -1,0 +1,72 @@
+/* src/components/Signup.css */
+
+body {
+  background: url('/back.jpeg') no-repeat center center fixed; 
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 5000px; 
+  width: 110%; 
+  height: 400px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  color: #555;
+  text-align: left;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Make input fields take full width of the container */
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
