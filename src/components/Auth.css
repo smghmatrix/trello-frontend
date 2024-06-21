@@ -1,4 +1,6 @@
 /* src/components/Auth.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 
 body {
   background: url('/back.jpeg') no-repeat center center fixed; 
@@ -29,7 +31,7 @@ h2 {
   color: #333;
   text-align: center;
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 4000;
 }
 
 form {
@@ -121,4 +123,29 @@ button:hover {
   50% { transform: translateX(5px); }
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
+}
+
+.Toastify__toast--success {
+  background-color: #4CAF50; 
+  color: white;
+}
+
+
+.Toastify__toast--error {
+  background-color: #F44336; 
+  color: white;
+}
+
+
+.Toastify__toast-container {
+  font-family: 'Roboto', sans-serif;
+}
+
+.Toastify__toast {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.Toastify__progress-bar {
+  background: white;
 }

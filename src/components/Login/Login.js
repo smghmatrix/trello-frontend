@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../Auth.css'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../Auth.css'; // Import the common CSS file
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -32,14 +34,63 @@ function Login() {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      // Handle form submission logic here
-      console.log(formData);
+      // Clear previous errors
       setErrors({});
+
+      // Send API request
+      fetch('https://your-api-endpoint/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            toast.success('Login successful!', {
+              position: "top-right",
+              autoClose: 3000, 
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              className: 'Toastify__toast--success',
+            });
+          } else {
+
+            toast.error('Login failed. Please check your credentials.', {
+              position: "top-right",
+              autoClose: 3000, 
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              className: 'Toastify__toast--error',
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          toast.error('An error occurred. Please try again.', {
+            position: "top-right",
+            autoClose: 3000, 
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            className: 'Toastify__toast--error',
+          });
+        });
     }
   };
 
   return (
     <div className="container">
+      <ToastContainer />
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -66,7 +117,7 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
-      <p className="signup-link">
+      <p className="link">
         Don't have an account? <Link to="/signup">Sign up here</Link>
       </p>
     </div>

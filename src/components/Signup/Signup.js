@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../Auth.css'; // Import the common CSS file
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../Auth.css'; 
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -21,6 +23,7 @@ function Signup() {
     e.preventDefault();
 
     let validationErrors = {};
+    const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
 
     if (!formData.username) {
       validationErrors.username = "Username is required";
@@ -30,8 +33,6 @@ function Signup() {
       validationErrors.email = "Email is required";
     }
 
-    const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
-
     if (!formData.password) {
       validationErrors.password = "Password is required";
     } else if (!passwordRegex.test(formData.password)) {
@@ -39,16 +40,61 @@ function Signup() {
     }
 
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+      setErrors(validationErrors); 
     } else {
-      // Handle form submission logic here
-      console.log(formData);
       setErrors({});
+      fetch('https://your-api-endpoint/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            toast.success('Signup successful! Please log in.', {
+              position: "top-right",
+              autoClose: 3000, 
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              className: 'Toastify__toast--success',
+            });
+          } else {
+            toast.error('Signup failed. Please try again.', {
+              position: "top-right",
+              autoClose: 3000, 
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              className: 'Toastify__toast--error',
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          toast.error('An error occurred. Please try again.', {
+            position: "top-right",
+            autoClose: 3000, 
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            className: 'Toastify__toast--error',
+          });
+        });
     }
   };
 
   return (
     <div className="container">
+      <ToastContainer />
       <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
