@@ -1,0 +1,98 @@
+/* src/components/Login.css */
+
+body {
+    background: url('/back.jpeg') no-repeat center center fixed; 
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px; /* Adjusted max-width */
+    width: 100%;
+    height: auto; /* Auto height to fit content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    text-align: left;
+  }
+  
+  input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; 
+    box-sizing: border-box; 
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .signup-link {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .signup-link a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+  

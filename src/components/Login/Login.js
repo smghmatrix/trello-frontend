@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Signup.css'; // Import the CSS file
+import './Login.css'; // Import the CSS file
 
-function Signup() {
+function Login() {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: ''
   });
@@ -24,17 +23,8 @@ function Signup() {
 
   return (
     <div className="container">
-      <h2>Signup</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username:</label>
-          <input 
-            type="text" 
-            name="username" 
-            value={formData.username} 
-            onChange={handleChange} 
-          />
-        </div>
         <div className="form-group">
           <label>Email:</label>
           <input 
@@ -53,13 +43,13 @@ function Signup() {
             onChange={handleChange} 
           />
         </div>
-        <button type="submit">Sign Up</button>
+        <button type="submit">Login</button>
       </form>
-      <p className="login-link">
-        Already registered? <Link to="/login">Click here to login</Link>
+      <p className="signup-link">
+        Don't have an account? <Link to="/signup">Sign up here</Link>
       </p>
     </div>
   );
 }
 
-export default Signup;
+export default Login;
