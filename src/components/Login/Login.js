@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css'; // Import the CSS file
+import '../Auth.css'; 
 
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData({
@@ -17,8 +18,24 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+
+    let validationErrors = {};
+
+    if (!formData.email) {
+      validationErrors.email = "Email is required";
+    }
+
+    if (!formData.password) {
+      validationErrors.password = "Password is required";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+    } else {
+      // Handle form submission logic here
+      console.log(formData);
+      setErrors({});
+    }
   };
 
   return (
@@ -32,7 +49,9 @@ function Login() {
             name="email" 
             value={formData.email} 
             onChange={handleChange} 
+            className={errors.email ? 'error-input' : ''}
           />
+          {errors.email && <p className="error">{errors.email}</p>}
         </div>
         <div className="form-group">
           <label>Password:</label>
@@ -41,7 +60,9 @@ function Login() {
             name="password" 
             value={formData.password} 
             onChange={handleChange} 
+            className={errors.password ? 'error-input' : ''}
           />
+          {errors.password && <p className="error">{errors.password}</p>}
         </div>
         <button type="submit">Login</button>
       </form>

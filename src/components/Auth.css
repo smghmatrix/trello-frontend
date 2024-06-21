@@ -1,6 +1,8 @@
+/* src/components/Auth.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 body {
-  background: url('/test.png') no-repeat center center fixed; 
+  background: url('/back.jpeg') no-repeat center center fixed; 
   background-size: cover;
   font-family: 'Roboto', sans-serif;
   display: flex;
@@ -15,9 +17,9 @@ body {
   padding: 40px 50px;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  max-width: 400px; /* Adjusted max-width */
+  max-width: 400px;
   width: 100%;
-  height: auto; /* Auto height to fit content */
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,7 +30,7 @@ h2 {
   color: #333;
   text-align: center;
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 3000;
 }
 
 form {
@@ -39,7 +41,8 @@ form {
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  position: relative;
 }
 
 label {
@@ -53,15 +56,21 @@ input {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 100%; 
-  box-sizing: border-box; 
+  width: 100%;
+  box-sizing: border-box;
   font-size: 16px;
   transition: border-color 0.3s;
+  margin-bottom: 5px; /* Space to accommodate error messages */
 }
 
 input:focus {
   border-color: #007bff;
   outline: none;
+}
+
+.error-input {
+  border-color: red;
+  animation: shake 0.3s;
 }
 
 button {
@@ -74,9 +83,43 @@ button {
   font-size: 18px;
   font-weight: 500;
   transition: background-color 0.3s;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 button:hover {
   background-color: #0056b3;
+}
+
+.link {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px; /* Adjusted to place the error message below the input field */
+  position: relative;
+}
+
+.error::before {
+  content: '⚠️';
+  margin-right: 5px;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
 }
