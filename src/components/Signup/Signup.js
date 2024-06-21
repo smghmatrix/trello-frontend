@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../Auth.css'; // Import the CSS file
+import '../Auth.css'; // Import the common CSS file
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -30,8 +30,12 @@ function Signup() {
       validationErrors.email = "Email is required";
     }
 
+    const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+
     if (!formData.password) {
       validationErrors.password = "Password is required";
+    } else if (!passwordRegex.test(formData.password)) {
+      validationErrors.password = "Password must be at least 8 characters long and contain at least one uppercase letter";
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -82,7 +86,7 @@ function Signup() {
         </div>
         <button type="submit">Sign Up</button>
       </form>
-      <p className="login-link">
+      <p className="link">
         Already registered? <Link to="/login">Click here to login</Link>
       </p>
     </div>
