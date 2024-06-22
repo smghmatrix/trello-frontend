@@ -3,67 +3,108 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar'; // Import the main Navbar component
 import './Profile.css'; // Import the CSS for the profile page
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Profile() {
   const [userData, setUserData] = useState({
     username: '',
+    email: '',
     userhandle: '',
     profilePicture: '',
     banner: '',
     bio: ''
   });
+  
+  const [newPassword, setNewPassword] = useState(''); // New state for the password
 
   useEffect(() => {
-    // Fetch user data from the API
-    fetch('https://your-api-endpoint.com/user')
-      .then(response => response.json())
-      .then(data => {
-        setUserData({
-          username: data.username,
-          userhandle: data.userhandle,
-          profilePicture: data.profilePicture,
-          banner: data.banner,
-          bio: data.bio
-        });
-      })
-      .catch(error => console.error('Error fetching user data:', error));
+    // Mock JSON object for testing
+    const mockData = {
+      username: 'John Doe',
+      email: 'seyed@gmail.com',
+      profilePicture: '/logo1.png',
+      banner: '/logo2.png',
+      bio: 'This is a mock bio for testing purposes.'
+    };
+
+    // Simulate fetching data from an API
+    setTimeout(() => {
+      setUserData(mockData);
+    }, 1000); // Simulate a network delay
+
   }, []);
 
   const handleBioChange = (e) => {
     setUserData({ ...userData, bio: e.target.value });
   };
 
+  const handleEmailChange = (e) => {
+    setUserData({ ...userData, email: e.target.value });
+  };
+
+  const handleNewPasswordChange = (e) => {
+    setNewPassword(e.target.value);
+  };
+
   const handleSave = () => {
-    // Save the updated bio to the API
-    fetch('https://your-api-endpoint.com/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ bio: userData.bio })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Successfully saved bio:', data);
-      })
-      .catch(error => console.error('Error saving bio:', error));
+    // Simulate saving the updated profile to an API
+    console.log('Saved profile:', userData);
+    toast.success('Profile updated successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const handleResetPassword = () => {
+    // Simulate resetting the password via an API
+    console.log('Password reset to:', newPassword);
+    toast.success('Password reset successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    setNewPassword(''); // Clear the password field after resetting
+  };
+
+  const handleDeleteAccount = () => {
+    // Simulate deleting the account via an API
+    console.log('Account deleted');
+    toast.error('Account deleted successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    // Add any additional logic here, such as redirecting to a different page
   };
 
   return (
     <div className="profile-container">
       <Navbar />
+      <ToastContainer />
       <div className="profile-content">
         <div className="profile-sidebar">
           <div className="profile-picture">
-            <img src={userData.profilePicture } alt="Profile" />
+            <img src={userData.profilePicture || "/logo512.png"} alt="Profile" />
             <h2>{userData.username}</h2>
-            <p>@{userData.userhandle}</p>
+            <p>{userData.email}</p>
           </div>
           <nav className="profile-nav">
             <ul>
               <li><a href="#info">Profile and Visibility</a></li>
-              <li><a href="#activity">Activity</a></li>
-              <li><a href="#cards">Cards</a></li>
               <li><a href="#settings">Settings</a></li>
             </ul>
           </nav>
@@ -73,7 +114,7 @@ function Profile() {
             <h2>Profile and Visibility</h2>
             <div className="profile-info">
               <div className="profile-banner">
-                <img src={userData.banner } alt="Banner" />
+                <img src={userData.banner || "/logo.jpeg"} alt="Banner" />
               </div>
               <div className="profile-details">
                 <h3>Manage your personal information</h3>
@@ -84,6 +125,8 @@ function Profile() {
                     <input type="text" value={userData.username} readOnly />
                   </div>
                   <div className="profile-field">
+                    <label>Email</label>
+                    <textarea value={userData.email} onChange={handleEmailChange}></textarea>
                     <label>Bio</label>
                     <textarea value={userData.bio} onChange={handleBioChange}></textarea>
                   </div>
@@ -92,17 +135,14 @@ function Profile() {
               </div>
             </div>
           </section>
-          <section id="activity">
-            <h2>Activity</h2>
-            <p>Activity content goes here.</p>
-          </section>
-          <section id="cards">
-            <h2>Cards</h2>
-            <p>Cards content goes here.</p>
-          </section>
           <section id="settings">
             <h2>Settings</h2>
-            <p>Settings content goes here.</p>
+            <div className="profile-field">
+              <label>New Password</label>
+              <input type="password" value={newPassword} onChange={handleNewPasswordChange} />
+            </div>
+            <button className="reset-password-button" onClick={handleResetPassword}>Reset Password</button>
+            <button className="delete-account-button" onClick={handleDeleteAccount}>Delete Account</button>
           </section>
         </div>
       </div>

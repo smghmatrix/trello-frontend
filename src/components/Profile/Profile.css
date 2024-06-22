@@ -123,4 +123,51 @@
   button:hover {
     background: #2980b9;
   }
-  
+
+
+
+.delete-account-button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px; /* Add margin to separate from other content */
+}
+
+.delete-account-button:hover {
+  background: #c0392b;
+}
+
+
+.reset-password-button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; /* Add margin to separate from other content */
+}
+
+.reset-password-button:hover {
+  background: #2980b9;
+}
+
+.delete-account-button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px; /* Add margin to separate from other content */
+}
+
+.delete-account-button:hover {
+  background: #c0392b;
+}
