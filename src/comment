@@ -1,0 +1,12 @@
+  // const [workspaces, setWorkspaces] = useState([]);
+  // const [tasks, setTasks] = useState([]);
+// useEffect(() => {
+  //   // Fetch workspaces and tasks from your API
+  //   fetch('/api/workspaces')
+  //     .then(response => response.json())
+  //     .then(data => setWorkspaces(data));
+
+  //   fetch('/api/tasks')
+  //     .then(response => response.json())
+  //     .then(data => setTasks(data));
+  // }, []);

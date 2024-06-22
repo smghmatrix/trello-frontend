@@ -6,33 +6,49 @@ body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
+  overflow: hidden; /* Prevent the body from scrolling */
 }
 
 .dashboard-container {
   display: flex;
-  flex-direction: row; /* Change to row to place sidebar and main content side by side */
-  margin-bottom:  20px; /* Adjust this based on the height of your navbar */
-  margin-right: 900px;
-  
+  flex-direction: column;
+  padding-top: 60px; /* Adjust this based on the height of your navbar */
+  height: 100vh;
+}
+
+.content-columns {
+  display: flex;
+  flex-direction: row; /* Change to row to place sidebar, main content, and task content side by side */
+  width: 100%;
+  height: calc(100vh - 60px); /* Adjust height based on navbar */
+  overflow: hidden; /* Prevent the container from scrolling */
+  padding-top: 100px; /* Add top padding to create space below navbar */
+}
+
+.sidebar, .main-content, .task-content {
+  overflow-y: auto; /* Allow vertical scrolling within each column */
 }
 
 .sidebar {
   width: 250px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: rgb(0, 0, 0);
   border-radius: 10px;
   padding: 30px;
+  margin-right: 20px; /* Space between columns */
 }
 
 .sidebar h2 {
   margin: 0;
-  padding: 30px 0;
+  padding: 15px 0;
+  color: rgb(17, 0, 255);
   border-bottom: 1px solid #757dbd;
 }
 
 .sidebar ul {
   list-style: none;
-  padding: 0;
+  padding: 5px;
 }
 
 .sidebar li {
@@ -43,15 +59,38 @@ body {
 .main-content {
   flex: 1;
   padding: 20px;
-  margin-left: 80px; /* Add margin to the left to accommodate sidebar */
+  background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: calc(100vh - 100px); /* Adjust height based on navbar and padding */
+  overflow-y: auto; /* Allow vertical scrolling within the workspace box */
+  margin-right: 20px; /* Space between columns */
 }
 
-.templates, .recently-viewed, .your-workspaces {
+.main-content h2 {
+  color: rgb(21, 119, 199);
+}
+
+.task-content {
+  width: 300px; /* Fixed width for task column */
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: calc(100vh - 100px); /* Adjust height based on navbar and padding */
+  overflow-y: auto; /* Allow vertical scrolling within the task box */
+}
+
+.task-content h2 {
+  color: rgb(0, 174, 255);
+}
+
+.recently-tasks, .your-workspaces {
   margin-bottom: 20px;
 }
 
-.workspace-card {
-  background: white;
+.workspace-card, .task-card {
+  background: linear-gradient(145deg, #d8d7d7, #ffffff); /* Gradient background for cards */
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -63,19 +102,25 @@ body {
 }
 
 .workspace-card button {
-  background: #007bff;
+  background: #0011ff;
   border: none;
   color: white;
   padding: 10px 15px;
   margin-right: 10px;
-  border-radius: 4px;
+  border-radius: 7px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .workspace-card button:hover {
-  background: #b3009b;
+  background: #00ff80;
 }
 
-.title-workspace {
+.title-workspace, .title-task {
   font-weight: 1000;
+}
+
+.date-task {
+  color: #000000;
+  font-size: 14px;
 }
