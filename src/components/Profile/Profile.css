@@ -1,0 +1,126 @@
+/* src/components/Profile.css */
+
+
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .profile-content {
+    display: flex;
+    flex-direction: row;
+    padding-top: 60px; /* Adjust this based on the height of your navbar */
+    height: calc(100vh - 60px);
+  }
+  
+  .profile-sidebar {
+    width: 250px;
+    background: #34495e;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  
+  .profile-picture h2, .profile-picture p {
+    margin: 10px 0;
+  }
+  
+  .profile-nav ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .profile-nav li {
+    margin: 10px 0;
+  }
+  
+  .profile-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    background: #2c3e50;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .profile-nav a:hover {
+    background: #1abc9c;
+  }
+  
+  .profile-main {
+    flex: 1;
+    padding: 20px;
+    background: #ecf0f1;
+    overflow-y: auto;
+  }
+  
+  .profile-main section {
+    margin-bottom: 20px;
+  }
+  
+  .profile-info {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-banner img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-details h3 {
+    margin: 0 0 10px 0;
+  }
+  
+  .profile-about {
+    margin-top: 20px;
+  }
+  
+  .profile-field {
+    margin-bottom: 15px;
+  }
+  
+  .profile-field label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .profile-field input, .profile-field textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .profile-field textarea {
+    resize: vertical;
+  }
+  
+  button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background: #2980b9;
+  }
+  

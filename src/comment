@@ -10,3 +10,115 @@
   //     .then(response => response.json())
   //     .then(data => setTasks(data));
   // }, []);
+
+
+
+
+  ===============================================
+
+  // src/components/Profile.js
+
+// import React, { useEffect, useState } from 'react';
+// import Navbar from '../Dashboard/Navbar'; // Import the main Navbar component
+// import './Profile.css'; // Import the CSS for the profile page
+
+// function Profile() {
+//   const [userData, setUserData] = useState({
+//     username: '',
+//     userhandle: '',
+//     profilePicture: '',
+//     banner: '',
+//     bio: ''
+//   });
+
+//   useEffect(() => {
+//     // Mock JSON object for testing
+//     const mockData = {
+//       username: 'John Doe',
+//       email: 'johndoe@gmail.com',
+//       profilePicture: '/logo1.png',
+//       banner: '/logo2.png',
+//       bio: 'This is a mock bio for testing purposes.'
+//     };
+
+//     // Simulate fetching data from an API
+//     setTimeout(() => {
+//       setUserData(mockData);
+//     }, 1000); // Simulate a network delay
+
+//   }, []);
+
+//   const handleBioChange = (e) => {
+//     setUserData({ ...userData, bio: e.target.value });
+//   };
+
+//   const handleSave = () => {
+//     // Simulate saving the updated bio to an API
+//     console.log('Saved bio:', userData.bio);
+//     alert('Bio saved successfully!');
+//   };
+
+//   return (
+//     <div className="profile-container">
+//       <Navbar />
+//       <div className="profile-content">
+//         <div className="profile-sidebar">
+//           <div className="profile-picture">
+//             <img src={userData.profilePicture || "/logo512.png"} alt="Profile" />
+//             <h2>{userData.username}</h2>
+//             <p>{userData.email}</p>
+//           </div>
+//           <nav className="profile-nav">
+//             <ul>
+//               <li><a href="#info">Profile and Visibility</a></li>
+//               <li><a href="#activity">Activity</a></li>
+//               <li><a href="#cards">Cards</a></li>
+//               <li><a href="#settings">Settings</a></li>
+//             </ul>
+//           </nav>
+//         </div>
+//         <div className="profile-main">
+//           <section id="info">
+//             <h2>Profile and Visibility</h2>
+//             <div className="profile-info">
+//               <div className="profile-banner">
+//                 <img src={userData.banner || "/logo.jpeg"} alt="Banner" />
+//               </div>
+//               <div className="profile-details">
+//                 <h3>Manage your personal information</h3>
+//                 <div className="profile-about">
+//                   <h4>About</h4>
+//                   <div className="profile-field">
+//                     <label>Username</label>
+//                     <input type="text" value={userData.username} readOnly />
+//                   </div>
+//                   <div className="profile-field">
+//                     <label>Bio</label>
+//                     <textarea value={userData.bio} onChange={handleBioChange}></textarea>
+//                   </div>
+//                   <button onClick={handleSave}>Save</button>
+//                 </div>
+//               </div>
+//             </div>
+//           </section>
+//           <section id="activity">
+//             <h2>Activity</h2>
+//             <p>Activity content goes here.</p>
+//           </section>
+//           <section id="cards">
+//             <h2>Cards</h2>
+//             <p>Cards content goes here.</p>
+//           </section>
+//           <section id="settings">
+//             <h2>Settings</h2>
+//             <p>Settings content goes here.</p>
+//           </section>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Profile;
+
+=====================================================

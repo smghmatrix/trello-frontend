@@ -12,6 +12,7 @@ function Navbar() {
         </div>
         <div className="navbar-menu">
           <a href="/workspace">Workspace</a>
+          <a href="/dashboard">dashboard</a>
           <a href="/tasks">Tasks</a>
           <a href="/profile">Profile</a>
         </div>
