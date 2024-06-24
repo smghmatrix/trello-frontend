@@ -203,6 +203,7 @@ function Tasks() {
 
   return (
     <div className="tasks-container">
+      <Navbar />
       <div className="tasks-content">
         <h2>Assigned Tasks</h2>
           <div className="table-container">

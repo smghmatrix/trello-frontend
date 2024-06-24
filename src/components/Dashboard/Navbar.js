@@ -1,6 +1,7 @@
 // src/components/Navbar.js
 
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import './Navbar.css'; // Import CSS for styling
 
 function Navbar() {
@@ -11,14 +12,16 @@ function Navbar() {
           <img src="/logo.png" alt="Logo" />
         </div>
         <div className="navbar-menu">
-          <a href="/workspace">Workspace</a>
-          <a href="/dashboard">dashboard</a>
-          <a href="/tasks">Tasks</a>
-          <a href="/profile">Profile</a>
+        <NavLink to="/workspace" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Workspace</NavLink>
+        <NavLink to="/dashboard" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Dashboard</NavLink>
+        <NavLink to="/tasks" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Tasks</NavLink>
+        <NavLink to="/profile" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Profile</NavLink>
         </div>
       </div>
       <div className="navbar-right">
-        <a href="/logout">Logout</a>
+        <NavLink to="/logout" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          Logout
+        </NavLink>
       </div>
     </div>
   );
