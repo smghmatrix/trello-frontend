@@ -52,6 +52,142 @@ const mockTasksData = [
     dueDate: '2024-02-13',
     status: 'done'
   },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+  {
+    title: 'Task 7',
+    description: 'Description for Task 3',
+    board: 'UI/UX Board',
+    dueDate: '2024-02-13',
+    status: 'done'
+  },
+
+  
   // Add more mock tasks as needed
 ];
 
@@ -67,21 +203,21 @@ function Tasks() {
 
   return (
     <div className="tasks-container">
-      <Navbar />
       <div className="tasks-content">
         <h2>Assigned Tasks</h2>
-        <table className="tasks-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Board</th>
-              <th>Due Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tasks.map((task, index) => (
+          <div className="table-container">
+            <table className="tasks-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Board</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                 {tasks.map((task, index) => (
               <tr key={index}>
                 <td>{task.title}</td>
                 <td>{task.description}</td>
@@ -89,12 +225,13 @@ function Tasks() {
                 <td>{task.dueDate}</td>
                 <td>{task.status}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          </div>
     </div>
-  );
+    );
 }
 
 export default Tasks;
