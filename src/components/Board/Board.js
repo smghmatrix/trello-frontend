@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './Board.css';
+import Navbar from '../Dashboard/Navbar'; // Import the main Navbar component
 
 const initialTasks = [
   { id: 'task-1', description: "The first task", status: "todo", assignee: "user 1" },
@@ -74,6 +75,7 @@ function Board() {
 
   return (
     <div className="board-container">
+      <Navbar />
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board-columns">
           {['todo', 'doing', 'done'].map(status => (
