@@ -3,7 +3,7 @@
 .board-container {
     display: flex;
     flex-direction: column;
-    padding-top: 60px; /* Adjust this based on the height of your navbar */
+    padding-top: 130px; /* Adjust this based on the height of your navbar */
     height: 100vh;
   }
   
