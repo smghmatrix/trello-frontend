@@ -10,6 +10,9 @@ const initialTasks = [
 
 function Board() {
   const [tasks, setTasks] = useState(initialTasks);
+  const [newTaskTodo, setNewTaskTodo] = useState({ description: '', assignee: '' });
+  const [newTaskDoing, setNewTaskDoing] = useState({ description: '', assignee: '' });
+  const [newTaskDone, setNewTaskDone] = useState({ description: '', assignee: '' });
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -36,6 +39,37 @@ function Board() {
 
   const getTasksByStatus = (status) => {
     return tasks.filter(task => task.status === status);
+  };
+
+  const handleAddTask = (status) => {
+    let newTask;
+    if (status === 'todo') newTask = newTaskTodo;
+    if (status === 'doing') newTask = newTaskDoing;
+    if (status === 'done') newTask = newTaskDone;
+
+    if (newTask.description.trim() === '' || newTask.assignee.trim() === '') {
+      alert('Please fill out both the description and assignee fields.');
+      return;
+    }
+
+    const newTaskId = `task-${tasks.length + 1}`;
+    const newTaskObject = {
+      id: newTaskId,
+      description: newTask.description,
+      assignee: newTask.assignee,
+      status: status,
+    };
+
+    setTasks([...tasks, newTaskObject]);
+    if (status === 'todo') setNewTaskTodo({ description: '', assignee: '' });
+    if (status === 'doing') setNewTaskDoing({ description: '', assignee: '' });
+    if (status === 'done') setNewTaskDone({ description: '', assignee: '' });
+  };
+
+  const handleNewTaskChange = (e, status) => {
+    if (status === 'todo') setNewTaskTodo({ ...newTaskTodo, [e.target.name]: e.target.value });
+    if (status === 'doing') setNewTaskDoing({ ...newTaskDoing, [e.target.name]: e.target.value });
+    if (status === 'done') setNewTaskDone({ ...newTaskDone, [e.target.name]: e.target.value });
   };
 
   return (
@@ -67,7 +101,36 @@ function Board() {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <button className="add-task-button">Add a card...</button>
+                  <div className="add-task-form">
+                    <input
+                      type="text"
+                      name="description"
+                      placeholder="Task description"
+                      value={
+                        status === 'todo' ? newTaskTodo.description :
+                        status === 'doing' ? newTaskDoing.description :
+                        newTaskDone.description
+                      }
+                      onChange={(e) => handleNewTaskChange(e, status)}
+                    />
+                    <input
+                      type="text"
+                      name="assignee"
+                      placeholder="Assignee"
+                      value={
+                        status === 'todo' ? newTaskTodo.assignee :
+                        status === 'doing' ? newTaskDoing.assignee :
+                        newTaskDone.assignee
+                      }
+                      onChange={(e) => handleNewTaskChange(e, status)}
+                    />
+                    <button
+                      className="add-task-button"
+                      onClick={() => handleAddTask(status)}
+                    >
+                      Add a card...
+                    </button>
+                  </div>
                 </div>
               )}
             </Droppable>
