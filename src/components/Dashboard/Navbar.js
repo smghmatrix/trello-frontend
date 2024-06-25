@@ -13,7 +13,6 @@ function Navbar() {
           <img src="/logo.png" alt="Logo" />
         </div>
         <div className="navbar-menu">
-          <NavLink to="/workspace" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Workspace</NavLink>
           <NavLink to="/dashboard" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Dashboard</NavLink>
           <NavLink to="/tasks" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Tasks</NavLink>
           <NavLink to="/profile" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Profile</NavLink>
