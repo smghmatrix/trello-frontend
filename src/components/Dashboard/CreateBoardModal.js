@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import './CreateBoardModal.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CreateBoardModal({ show, onClose, onCreate }) {
   const [title, setTitle] = useState('');
@@ -12,19 +14,6 @@ function CreateBoardModal({ show, onClose, onCreate }) {
     { username: 'user1' },
     { username: 'user2' },
     { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-    { username: 'user3' },
-
-
     // Add more mock users here or fetch from an API
   ]);
 
@@ -40,6 +29,15 @@ function CreateBoardModal({ show, onClose, onCreate }) {
 
   const handleCreateBoard = () => {
     onCreate({ title, description, members });
+    toast.success('Board created successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     onClose();
   };
 
@@ -50,6 +48,7 @@ function CreateBoardModal({ show, onClose, onCreate }) {
   return (
     <div className="modal-overlay">
       <div className="modal">
+        <ToastContainer />
         <button className="close-button2" onClick={onClose}>X</button>
         <h2>Create Board</h2>
         <div className="modal-content">
