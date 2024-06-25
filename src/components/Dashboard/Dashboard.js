@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Navbar from './Navbar'; // Import Navbar component
+import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import CSS for styling
 
 const workspaceData = [
@@ -25,11 +26,7 @@ const workspaceData = [
     "name": "Workspace 4",
     "date": "2022/04/12"
   },
-  {
-    "id": 4,
-    "name": "Workspace 4",
-    "date": "2022/04/12"
-  },
+  
 
  
   
@@ -74,8 +71,14 @@ const taskData = [
 ];
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [workspaces, setWorkspaces] = useState(workspaceData);
   const [tasks, setTasks] = useState(taskData);
+
+
+  const viewBoard = (workspaceId) => {
+    navigate(`/board/${workspaceId}`);
+  };
 
   return (
     <div className="dashboard-container">
@@ -84,19 +87,21 @@ function Dashboard() {
         <div className="sidebar">
           <h2>Workspaces List</h2>
           <ul>
-            {workspaces.map(workspace => (
-              <li key={workspace.id}>{workspace.name} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {workspace.date}</li>
+            {workspaces.map((workspace) => (
+              <li key={workspace.id}>
+                {workspace.name} &nbsp; {workspace.date}
+              </li>
             ))}
           </ul>
         </div>
         <div className="main-content">
           <h2>Workspace Detail</h2>
           <div className="your-workspaces">
-            {workspaces.map(workspace => (
+            {workspaces.map((workspace) => (
               <div key={workspace.id} className="workspace-card">
-                <div className='title-workspace'>{workspace.name}</div>
+                <div className="title-workspace">{workspace.name}</div>
+                <button onClick={() => viewBoard(workspace.id)}>Views</button>
                 <button>Tasks</button>
-                <button>Views</button>
                 <button>Members</button>
                 <button>Leave</button>
               </div>

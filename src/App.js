@@ -9,6 +9,8 @@ import Tasks from './components/Tasks/Tasks';
 import Profile from './components/Profile/Profile';
 import CreateBoardModal from './components/Dashboard/CreateBoardModal';
 import Navbar from './components/Dashboard/Navbar';
+import Board from './components/Board/Board'; // Import the Board component
+
 
 function App() {
   const location = useLocation();
@@ -34,7 +36,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/create-board" element={<></>} /> {/* Placeholder for the route */}
+        <Route path="/board/:workspaceId" element={<Board />} /> {/* Add the Board route */}
+        <Route path="/create-board" element={<></>} /> 
       </Routes>
       {isCreateBoardRoute && (
         <CreateBoardModal show={true} onClose={handleCloseModal} onCreate={handleCreateBoard} />
