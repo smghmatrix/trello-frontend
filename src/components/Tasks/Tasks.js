@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '../Dashboard/Navbar'; // Import the main Navbar component
-import './Tasks.css'; // Import the CSS for the tasks page
+// src/components/Tasks.js
 
-const mockTasksData = [
+import React, { useState } from 'react';
+import Navbar from '../Dashboard/Navbar'; // Import Navbar component
+import './Tasks.css'; // Import CSS for styling
+import Modal from './Modal'; // Import the Modal component
+
+const taskData = [
   {
+    id: 1,
     title: 'Task 1',
     description: 'Description for Task 1',
     board: 'Frontend Board',
@@ -11,228 +15,72 @@ const mockTasksData = [
     status: 'todo'
   },
   {
-    title: 'Task 2',
-    description: 'Description for Task 2',
-    board: 'Backend Board',
-    dueDate: '2024-02-12',
-    status: 'in progress'
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
   },
   {
-    title: 'Task 3',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
   },
-  {
-    title: 'Task 4',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 5',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 6',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-  {
-    title: 'Task 7',
-    description: 'Description for Task 3',
-    board: 'UI/UX Board',
-    dueDate: '2024-02-13',
-    status: 'done'
-  },
-
   
-  // Add more mock tasks as needed
+  // Add more tasks here
 ];
 
 function Tasks() {
-  const [tasks, setTasks] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
-  useEffect(() => {
-    // Simulate fetching data from an API
-    setTimeout(() => {
-      setTasks(mockTasksData);
-    }, 1000); // Simulate a network delay
-  }, []);
+  const handleRowClick = (task) => {
+    setSelectedTask(task);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedTask(null);
+  };
 
   return (
     <div className="tasks-container">
       <Navbar />
       <div className="tasks-content">
         <h2>Assigned Tasks</h2>
-          <div className="table-container">
-            <table className="tasks-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Board</th>
-                  <th>Due Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                 {tasks.map((task, index) => (
-              <tr key={index}>
-                <td>{task.title}</td>
-                <td>{task.description}</td>
-                <td>{task.board}</td>
-                <td>{task.dueDate}</td>
-                <td>{task.status}</td>
+        <div className="tasks-table-container">
+          <table className="tasks-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Board</th>
+                <th>Due Date</th>
+                <th>Status</th>
               </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-          </div>
+            </thead>
+            <tbody>
+              {taskData.map(task => (
+                <tr key={task.id} onClick={() => handleRowClick(task)}>
+                  <td>{task.title}</td>
+                  <td>{task.description}</td>
+                  <td>{task.board}</td>
+                  <td>{task.dueDate}</td>
+                  <td>{task.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Modal show={showModal} onClose={handleCloseModal} task={selectedTask} />
+      </div>
     </div>
-    );
+  );
 }
 
 export default Tasks;
