@@ -30,6 +30,78 @@ const taskData = [
     dueDate: '2024-02-11',
     status: 'todo'
   },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
+  {
+    id: 1,
+    title: 'Task 1',
+    description: 'Description for Task 1',
+    board: 'Frontend Board',
+    dueDate: '2024-02-11',
+    status: 'todo'
+  },
   
   // Add more tasks here
 ];

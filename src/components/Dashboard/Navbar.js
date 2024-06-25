@@ -16,7 +16,7 @@ function Navbar() {
           <NavLink to="/dashboard" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Dashboard</NavLink>
           <NavLink to="/tasks" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Tasks</NavLink>
           <NavLink to="/profile" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Profile</NavLink>
-          <NavLink to="/create-board" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Create Board</NavLink>
+          <NavLink to="/create-board" style={({ isActive }) => ({ color: isActive ? 'red' : 'white' })}>Create Workspace</NavLink>
         </div>
       </div>
       <div className="navbar-right">
