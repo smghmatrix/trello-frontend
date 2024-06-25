@@ -44,7 +44,7 @@
 }
 
 .tasks-table tr:nth-child(even) {
-  background-color: #d1cfcfd7;
+  background-color: #fdf5abd7;
 }
 
 .tasks-table tr:hover {
