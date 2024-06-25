@@ -1,35 +1,64 @@
+/* Board.css */
 
-  .board-container {
+.board-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: px; /* Adjust this based on the height of your navbar */
+    height: calc(100vh - 10vh);
+  }
+  
+  .board-columns {
     display: flex;
     justify-content: space-between;
     padding: 20px;
+    gap: 0px; /* Add gap between columns */
   }
   
-  .column {
-    background: #ebecf0;
-    border-radius: 3px;
+  .board-column {
+    flex: 1;
+    width: 400px; /* Increase this value to make columns wider */
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+  }
+  
+  .board-column h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .task-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+  
+  .task-card h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .task-card p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .add-task-button {
+    width: 100%;
     padding: 10px;
-    width: 30%;
-    box-shadow: 0 1px 0 rgba(9,30,66,.25);
-  }
-  
-  .column h2 {
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
     font-size: 16px;
-    font-weight: bold;
-    margin: 0 0 10px;
   }
   
-  .task-list {
-    min-height: 100px;
-    align-content: center;
-  }
-  
-  .task {
-    background: #fff;
-    align-content: center;
-    border-radius: 3px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 0 rgba(9,30,66,.25);
+  .add-task-button:hover {
+    background-color: #0056b3;
   }
   
