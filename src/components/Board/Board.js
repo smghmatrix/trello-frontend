@@ -3,6 +3,8 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Board.css';
+import Navbar from '../Dashboard/Navbar'; // Import Navbar component
+
 
 const initialTasks = [
   { id: 'task-1', title: "The first task", description: "Description for task 1", status: "todo", assignee: "user 1", dueDate: "2023-12-01", estimate: "2 days", photo: null },
@@ -17,6 +19,8 @@ const initialWorkspace = {
 };
 
 function Board() {
+  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
   const [tasks, setTasks] = useState(initialWorkspace.tasks);
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [showMembersModal, setShowMembersModal] = useState(false);
@@ -55,6 +59,11 @@ function Board() {
     setTasks(updatedTasks);
   };
 
+  const handleEditTask = (task) => {
+    setCurrentTask(task);
+    setShowEditTaskModal(true);
+  };
+  
   const getTasksByStatus = (status) => {
     return tasks.filter(task => task.status === status);
   };
@@ -92,6 +101,27 @@ function Board() {
     }
   };
 
+  const handleUpdateTask = (e) => {
+    e.preventDefault();
+    const updatedTasks = tasks.map(task => task.id === currentTask.id ? currentTask : task);
+    setTasks(updatedTasks);
+    toast.success('Task updated successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    setShowEditTaskModal(false);
+  };
+  
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentTask({ ...currentTask, [name]: value });
+  };
+
   const handleAddTask = (e) => {
     e.preventDefault();
     const taskId = `task-${tasks.length + 1}`;
@@ -116,6 +146,7 @@ function Board() {
 
   return (
     <div className="board-container">
+      <Navbar />
       <ToastContainer />
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board-header">
@@ -148,8 +179,8 @@ function Board() {
                           <h3>{task.title}</h3>
                           <p><strong>Assignee:</strong> {task.assignee}</p>
                           {task.photo && <img src={task.photo} alt="Task" />}
-                          <button className="edit-task-button">...</button>
-                        </div>
+                          <button className="edit-task-button" onClick={() => handleEditTask(task)}>Edit</button>
+                          </div>
                       )}
                     </Draggable>
                   ))}
@@ -191,6 +222,25 @@ function Board() {
           </div>
         </div>
       )}
+      
+      {showEditTaskModal && (
+  <div className="modal">
+    <div className="modal-content">
+      <h2>Edit Task</h2>
+      <form onSubmit={handleUpdateTask}>
+        <input type="text" name="title" placeholder="Title" value={currentTask.title} onChange={handleEditInputChange} required />
+        <textarea name="description" placeholder="Description" value={currentTask.description} onChange={handleEditInputChange}></textarea>
+        <input type="text" name="estimate" placeholder="Estimate" value={currentTask.estimate} onChange={handleEditInputChange} />
+        <input type="date" name="dueDate" placeholder="Due Date" value={currentTask.dueDate} onChange={handleEditInputChange} />
+        <input type="text" name="assignee" placeholder="Assignee" value={currentTask.assignee} onChange={handleEditInputChange} />
+        <input type="file" name="photo" onChange={(e) => setCurrentTask({ ...currentTask, photo: URL.createObjectURL(e.target.files[0]) })} />
+        <button type="submit">Update Task</button>
+      </form>
+      <button onClick={() => setShowEditTaskModal(false)}>Close</button>
+    </div>
+  </div>
+)}
+
 
       {showAddTaskModal && (
         <div className="modal">
