@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Board.css';
-import Navbar from '../Dashboard/Navbar'; // Import the main Navbar component
+import Navbar from '../Dashboard/Navbar'; // Import Navbar component
+
 
 const initialTasks = [
   { id: 'task-1', description: "The first task", status: "todo", assignee: "user 1" },
@@ -9,11 +12,17 @@ const initialTasks = [
   { id: 'task-3', description: "The third task", status: "done", assignee: "user 3" },
 ];
 
+const initialWorkspace = {
+  members: ['user1', 'user2', 'user3'],
+  tasks: initialTasks,
+  isAdmin: false
+};
+
 function Board() {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [newTaskTodo, setNewTaskTodo] = useState({ description: '', assignee: '' });
-  const [newTaskDoing, setNewTaskDoing] = useState({ description: '', assignee: '' });
-  const [newTaskDone, setNewTaskDone] = useState({ description: '', assignee: '' });
+  const [tasks, setTasks] = useState(initialWorkspace.tasks);
+  const [workspace, setWorkspace] = useState(initialWorkspace);
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -42,41 +51,52 @@ function Board() {
     return tasks.filter(task => task.status === status);
   };
 
-  const handleAddTask = (status) => {
-    let newTask;
-    if (status === 'todo') newTask = newTaskTodo;
-    if (status === 'doing') newTask = newTaskDoing;
-    if (status === 'done') newTask = newTaskDone;
-
-    if (newTask.description.trim() === '' || newTask.assignee.trim() === '') {
-      alert('Please fill out both the description and assignee fields.');
-      return;
-    }
-
-    const newTaskId = `task-${tasks.length + 1}`;
-    const newTaskObject = {
-      id: newTaskId,
-      description: newTask.description,
-      assignee: newTask.assignee,
-      status: status,
-    };
-
-    setTasks([...tasks, newTaskObject]);
-    if (status === 'todo') setNewTaskTodo({ description: '', assignee: '' });
-    if (status === 'doing') setNewTaskDoing({ description: '', assignee: '' });
-    if (status === 'done') setNewTaskDone({ description: '', assignee: '' });
+  const handleLeaveWorkspace = () => {
+    toast.success('You have left the workspace!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
-  const handleNewTaskChange = (e, status) => {
-    if (status === 'todo') setNewTaskTodo({ ...newTaskTodo, [e.target.name]: e.target.value });
-    if (status === 'doing') setNewTaskDoing({ ...newTaskDoing, [e.target.name]: e.target.value });
-    if (status === 'done') setNewTaskDone({ ...newTaskDone, [e.target.name]: e.target.value });
+  const handleAddMember = (e) => {
+    e.preventDefault();
+    const newMember = e.target.newMember.value;
+    if (newMember && !workspace.members.includes(newMember)) {
+      setWorkspace({
+        ...workspace,
+        members: [...workspace.members, newMember]
+      });
+      toast.success('Member added successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setShowAddMemberModal(false);
+    }
   };
 
   return (
     <div className="board-container">
       <Navbar />
+      <ToastContainer />
       <DragDropContext onDragEnd={onDragEnd}>
+        <div className="board-header">
+          <h1>Workspace Board</h1>
+          <div className="board-actions">
+            <button onClick={() => setShowMembersModal(true)}>Show Members</button>
+            <button onClick={handleLeaveWorkspace}>Leave Workspace</button>
+            {workspace.isAdmin && <button onClick={() => setShowAddMemberModal(true)}>Add Member</button>}
+          </div>
+        </div>
         <div className="board-columns">
           {['todo', 'doing', 'done'].map(status => (
             <Droppable key={status} droppableId={status}>
@@ -103,42 +123,55 @@ function Board() {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <div className="add-task-form">
-                    <input
-                      type="text"
-                      name="description"
-                      placeholder="Task description"
-                      value={
-                        status === 'todo' ? newTaskTodo.description :
-                        status === 'doing' ? newTaskDoing.description :
-                        newTaskDone.description
-                      }
-                      onChange={(e) => handleNewTaskChange(e, status)}
-                    />
-                    <input
-                      type="text"
-                      name="assignee"
-                      placeholder="Assignee"
-                      value={
-                        status === 'todo' ? newTaskTodo.assignee :
-                        status === 'doing' ? newTaskDoing.assignee :
-                        newTaskDone.assignee
-                      }
-                      onChange={(e) => handleNewTaskChange(e, status)}
-                    />
-                    <button
-                      className="add-task-button"
-                      onClick={() => handleAddTask(status)}
-                    >
-                      Add a card...
-                    </button>
-                  </div>
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const description = e.target.description.value;
+                    const assignee = e.target.assignee.value;
+                    const newTask = {
+                      id: `task-${tasks.length + 1}`,
+                      description,
+                      status,
+                      assignee
+                    };
+                    setTasks([...tasks, newTask]);
+                  }}>
+                    <input type="text" name="description" placeholder="Task description" required />
+                    <input type="text" name="assignee" placeholder="Assignee" required />
+                    <button type="submit" className="add-task-button">Add a card...</button>
+                  </form>
                 </div>
               )}
             </Droppable>
           ))}
         </div>
       </DragDropContext>
+
+      {showMembersModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Members</h2>
+            <ul>
+              {workspace.members.map(member => (
+                <li key={member}>{member}</li>
+              ))}
+            </ul>
+            <button onClick={() => setShowMembersModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {showAddMemberModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Add Member</h2>
+            <form onSubmit={handleAddMember}>
+              <input type="text" name="newMember" placeholder="Username" required />
+              <button type="submit">Add Member</button>
+            </form>
+            <button onClick={() => setShowAddMemberModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
