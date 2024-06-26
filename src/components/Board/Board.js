@@ -196,6 +196,7 @@ function Board() {
         </div>
       </DragDropContext>
 
+
       {showMembersModal && (
         <div className="modal">
           <div className="modal-content">

@@ -56,7 +56,7 @@
 
 .task-card img {
   max-width: 100%;
-  max-height: 150px;
+  max-height: 100px;
   margin-top: 10px;
   border-radius: 5px;
 }
@@ -96,12 +96,13 @@
   padding: 10px 15px;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: -20px;
-  align-items: center;
+  margin-top: 50px;
+  margin-right: 10px;
+  align-items: flex;
 }
 
 .board-actions button:hover {
-  background: #ff9100;
+  background: #5900ff;
 }
 
 .modal-content {
@@ -133,13 +134,15 @@
 }
 
 .edit-task-button {
-  background: none;
+  background: #000000;
   border: none;
+  color: rgb(255, 255, 255);
+  padding: 5px 15px;
+  border-radius: 4px;
   cursor: pointer;
-  color: #555;
-  font-size: 16px;
+  align-items: center;
 }
 
 .edit-task-button:hover {
-  color: #007bff;
+  color: #2f00ff;
 }
