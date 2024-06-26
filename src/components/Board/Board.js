@@ -3,19 +3,17 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Board.css';
-import Navbar from '../Dashboard/Navbar'; // Import Navbar component
-
 
 const initialTasks = [
-  { id: 'task-1', description: "The first task", status: "todo", assignee: "user 1" },
-  { id: 'task-2', description: "The second task", status: "doing", assignee: "user 2" },
-  { id: 'task-3', description: "The third task", status: "done", assignee: "user 3" },
+  { id: 'task-1', title: "The first task", description: "Description for task 1", status: "todo", assignee: "user 1", dueDate: "2023-12-01", estimate: "2 days", photo: null },
+  { id: 'task-2', title: "The second task", description: "Description for task 2", status: "doing", assignee: "user 2", dueDate: "2023-12-02", estimate: "1 day", photo: null },
+  { id: 'task-3', title: "The third task", description: "Description for task 3", status: "done", assignee: "user 3", dueDate: "2023-12-03", estimate: "3 days", photo: null },
 ];
 
 const initialWorkspace = {
   members: ['user1', 'user2', 'user3'],
   tasks: initialTasks,
-  isAdmin: false
+  isAdmin: true
 };
 
 function Board() {
@@ -23,6 +21,16 @@ function Board() {
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+  const [newTask, setNewTask] = useState({
+    title: '',
+    description: '',
+    status: '',
+    assignee: '',
+    dueDate: '',
+    estimate: '',
+    photo: null
+  });
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -84,9 +92,30 @@ function Board() {
     }
   };
 
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    const taskId = `task-${tasks.length + 1}`;
+    const newTaskWithId = { ...newTask, id: taskId };
+    setTasks([...tasks, newTaskWithId]);
+    toast.success('Task added successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    setShowAddTaskModal(false);
+  };
+
+  const handleTaskInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTask({ ...newTask, [name]: value });
+  };
+
   return (
     <div className="board-container">
-      <Navbar />
       <ToastContainer />
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board-header">
@@ -116,29 +145,19 @@ function Board() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <h3>{task.description}</h3>
+                          <h3>{task.title}</h3>
                           <p><strong>Assignee:</strong> {task.assignee}</p>
+                          {task.photo && <img src={task.photo} alt="Task" />}
+                          <button className="edit-task-button">...</button>
                         </div>
                       )}
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  <form onSubmit={(e) => {
-                    e.preventDefault();
-                    const description = e.target.description.value;
-                    const assignee = e.target.assignee.value;
-                    const newTask = {
-                      id: `task-${tasks.length + 1}`,
-                      description,
-                      status,
-                      assignee
-                    };
-                    setTasks([...tasks, newTask]);
-                  }}>
-                    <input type="text" name="description" placeholder="Task description" required />
-                    <input type="text" name="assignee" placeholder="Assignee" required />
-                    <button type="submit" className="add-task-button">Add a card...</button>
-                  </form>
+                  <button className="add-task-button" onClick={() => {
+                    setNewTask({ ...newTask, status });
+                    setShowAddTaskModal(true);
+                  }}>Add a card...</button>
                 </div>
               )}
             </Droppable>
@@ -169,6 +188,24 @@ function Board() {
               <button type="submit">Add Member</button>
             </form>
             <button onClick={() => setShowAddMemberModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {showAddTaskModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Add Task</h2>
+            <form onSubmit={handleAddTask}>
+              <input type="text" name="title" placeholder="Title" value={newTask.title} onChange={handleTaskInputChange} required />
+              <textarea name="description" placeholder="Description" value={newTask.description} onChange={handleTaskInputChange}></textarea>
+              <input type="text" name="estimate" placeholder="Estimate" value={newTask.estimate} onChange={handleTaskInputChange} />
+              <input type="date" name="dueDate" placeholder="Due Date" value={newTask.dueDate} onChange={handleTaskInputChange} />
+              <input type="text" name="assignee" placeholder="Assignee" value={newTask.assignee} onChange={handleTaskInputChange} />
+              <input type="file" name="photo" onChange={(e) => setNewTask({ ...newTask, photo: URL.createObjectURL(e.target.files[0]) })} />
+              <button type="submit">Add Task</button>
+            </form>
+            <button onClick={() => setShowAddTaskModal(false)}>Close</button>
           </div>
         </div>
       )}
