@@ -6,33 +6,42 @@ import './Profile.css'; // Import the CSS for the profile page
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const USER_ID = 2; // Static ID for testing purposes
+
 function Profile() {
   const [userData, setUserData] = useState({
     username: '',
     email: '',
-    userhandle: '',
     profilePicture: '',
     banner: '',
     bio: ''
   });
-  
+
   const [newPassword, setNewPassword] = useState(''); // New state for the password
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [banner, setBanner] = useState(null);
 
   useEffect(() => {
-    // Mock JSON object for testing
-    const mockData = {
-      username: 'John Doe',
-      email: 'seyed@gmail.com',
-      profilePicture: '/logo1.png',
-      banner: '/logo2.png',
-      bio: 'This is a mock bio for testing purposes.'
-    };
-
-    // Simulate fetching data from an API
-    setTimeout(() => {
-      setUserData(mockData);
-    }, 1000); // Simulate a network delay
-
+    // Fetch user data from the API
+    fetch(`${process.env.REACT_APP_API_URL}/users/${USER_ID}/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setUserData({
+          username: data.username,
+          email: data.email,
+          profilePicture: data.avatar,
+          banner: data.banner,
+          bio: data.bio
+        });
+        setProfilePicture(data.avatar); // Set initial state for comparison
+        setBanner(data.banner); // Set initial state for comparison
+      })
+      .catch(error => console.error('Error fetching user data:', error));
   }, []);
 
   const handleBioChange = (e) => {
@@ -43,22 +52,55 @@ function Profile() {
     setUserData({ ...userData, email: e.target.value });
   };
 
-  const handleNewPasswordChange = (e) => {
-    setNewPassword(e.target.value);
+  const handleProfilePictureChange = (e) => {
+    setProfilePicture(e.target.files[0]);
+  };
+
+  const handleBannerChange = (e) => {
+    setBanner(e.target.files[0]);
   };
 
   const handleSave = () => {
-    // Simulate saving the updated profile to an API
-    console.log('Saved profile:', userData);
-    toast.success('Profile updated successfully!', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    const formData = new FormData();
+    formData.append('username', userData.username);
+    formData.append('email', userData.email);
+    formData.append('bio', userData.bio);
+    formData.append('avatar', profilePicture ? profilePicture : null);
+    formData.append('banner', banner ? banner : null);
+
+    fetch(`${process.env.REACT_APP_API_URL}/users/${USER_ID}/`, {
+      method: 'PUT',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Saved profile:', data);
+        toast.success('Profile updated successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch(error => {
+        console.error('Error updating profile:', error);
+        toast.error('An error occurred. Please try again.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
+
+  const handleNewPasswordChange = (e) => {
+    setNewPassword(e.target.value);
   };
 
   const handleResetPassword = () => {
@@ -98,7 +140,7 @@ function Profile() {
       <div className="profile-content">
         <div className="profile-sidebar">
           <div className="profile-picture">
-            <img src={userData.profilePicture || "/logo512.png"} alt="Profile" />
+            <img src={userData.profilePicture} alt="Profile" />
             <h2>{userData.username}</h2>
             <p>{userData.email}</p>
           </div>
@@ -114,7 +156,7 @@ function Profile() {
             <h2>Profile and Visibility</h2>
             <div className="profile-info">
               <div className="profile-banner">
-                <img src={userData.banner || "/logo.jpeg"} alt="Banner" />
+                <img src={userData.banner} alt="Banner" />
               </div>
               <div className="profile-details">
                 <h3>Manage your personal information</h3>
@@ -129,6 +171,14 @@ function Profile() {
                     <textarea value={userData.email} onChange={handleEmailChange}></textarea>
                     <label>Bio</label>
                     <textarea value={userData.bio} onChange={handleBioChange}></textarea>
+                  </div>
+                  <div className="profile-field">
+                    <label>Profile Picture</label>
+                    <input type="file" onChange={handleProfilePictureChange} />
+                  </div>
+                  <div className="profile-field">
+                    <label>Banner</label>
+                    <input type="file" onChange={handleBannerChange} />
                   </div>
                   <button onClick={handleSave}>Save</button>
                 </div>

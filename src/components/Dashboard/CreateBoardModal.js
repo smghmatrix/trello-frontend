@@ -20,7 +20,7 @@ function CreateBoardModal({ show, onClose, onCreate }) {
       })
         .then(response => response.json())
         .then(data => {
-          setUserList(data.users);
+          setUserList(data.results);
         })
         .catch(error => console.error('Error fetching users:', error));
     }
