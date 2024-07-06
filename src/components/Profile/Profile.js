@@ -38,8 +38,6 @@ function Profile() {
           banner: data.banner,
           bio: data.bio
         });
-        setProfilePicture(data.avatar); // Set initial state for comparison
-        setBanner(data.banner); // Set initial state for comparison
       })
       .catch(error => console.error('Error fetching user data:', error));
   }, []);
@@ -61,20 +59,25 @@ function Profile() {
   };
 
   const handleSave = () => {
-    const formData = new FormData();
-    formData.append('username', userData.username);
-    formData.append('email', userData.email);
-    formData.append('bio', userData.bio);
-    formData.append('avatar', profilePicture ? profilePicture : null);
-    formData.append('banner', banner ? banner : null);
+    const updatedUserData = {
+      username: userData.username,
+      email: userData.email,
+      bio: userData.bio,
+      avatar: profilePicture ? URL.createObjectURL(profilePicture) : null,
+      banner: banner ? URL.createObjectURL(banner) : null,
+    };
 
     fetch(`${process.env.REACT_APP_API_URL}/users/${USER_ID}/`, {
       method: 'PUT',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify(updatedUserData),
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Saved profile:', data);
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status === 200) {
         toast.success('Profile updated successfully!', {
           position: "top-right",
           autoClose: 3000,
@@ -84,7 +87,19 @@ function Profile() {
           draggable: true,
           progress: undefined,
         });
-      })
+      }
+      else{
+        toast.error(JSON.stringify(body), {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+  })
       .catch(error => {
         console.error('Error updating profile:', error);
         toast.error('An error occurred. Please try again.', {
