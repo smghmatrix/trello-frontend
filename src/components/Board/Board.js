@@ -112,6 +112,17 @@ function Board() {
       });
       setShowAddMemberModal(false);
     }
+    else {
+      toast.error('This member has already been added!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
   
 
