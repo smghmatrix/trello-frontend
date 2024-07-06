@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState  , useEffect} from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +11,8 @@ const initialTasks = [
   { id: 'task-2', title: "The second task", description: "Description for task 2", status: "doing", assignee: "user 2", dueDate: "2023-12-02", estimate: "1 day", photo: null },
   { id: 'task-3', title: "The third task", description: "Description for task 3", status: "done", assignee: "user 3", dueDate: "2023-12-03", estimate: "3 days", photo: null },
 ];
+
+
 
 const initialWorkspace = {
   members: ['user1', 'user2', 'user3'],
@@ -26,6 +28,19 @@ function Board() {
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    // Fetch users when component mounts
+    fetch(`${process.env.REACT_APP_API_URL}/users/`)
+      .then(response => response.json())
+      .then(data => {
+        setUserList(data.users);
+      })
+      .catch(error => console.error('Error fetching users:', error));
+  }, []);
+  
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
@@ -80,13 +95,11 @@ function Board() {
     });
   };
 
-  const handleAddMember = (e) => {
-    e.preventDefault();
-    const newMember = e.target.newMember.value;
-    if (newMember && !workspace.members.includes(newMember)) {
+  const handleAddMember = (username) => {
+    if (!workspace.members.includes(username)) {
       setWorkspace({
         ...workspace,
-        members: [...workspace.members, newMember]
+        members: [...workspace.members, username]
       });
       toast.success('Member added successfully!', {
         position: "top-right",
@@ -100,6 +113,7 @@ function Board() {
       setShowAddMemberModal(false);
     }
   };
+  
 
   const handleUpdateTask = (e) => {
     e.preventDefault();
@@ -211,18 +225,30 @@ function Board() {
         </div>
       )}
 
-      {showAddMemberModal && (
-        <div className="modal-createTask">
-          <div className="modal-content2">
-            <h2>Add Member</h2>
-            <form onSubmit={handleAddMember}>
-              <input type="text" name="newMember" placeholder="Username" required />
-              <button type="submit">Add Member</button>
-            </form>
-            <button onClick={() => setShowAddMemberModal(false)}>Close</button>
-          </div>
-        </div>
-      )}
+{showAddMemberModal && (
+  <div className="modal-createTask">
+    <div className="modal-content2">
+      <h2>Add Member</h2>
+      <input 
+        type="text" 
+        placeholder="Search users" 
+        value={search} 
+        onChange={(e) => setSearch(e.target.value)} 
+      />
+      <ul className="user-list">
+        {userList
+          .filter(user => user.username.toLowerCase().includes(search.toLowerCase()))
+          .map(user => (
+            <li key={user.id} onClick={() => handleAddMember(user.username)}>
+              {user.username}
+            </li>
+          ))}
+      </ul>
+      <button onClick={() => setShowAddMemberModal(false)}>Close</button>
+    </div>
+  </div>
+)}
+
       
       {showEditTaskModal && (
   <div className="modal-createTask">
