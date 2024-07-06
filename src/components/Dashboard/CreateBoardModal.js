@@ -1,6 +1,4 @@
-// src/components/CreateBoardModal.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CreateBoardModal.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,12 +8,23 @@ function CreateBoardModal({ show, onClose, onCreate }) {
   const [description, setDescription] = useState('');
   const [members, setMembers] = useState([]);
   const [search, setSearch] = useState('');
-  const [userList, setUserList] = useState([
-    { username: 'user1' },
-    { username: 'user2' },
-    { username: 'user3' },
-    // Add more mock users here or fetch from an API
-  ]);
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    if (show) {
+      fetch(`${process.env.REACT_APP_API_URL}/users/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          setUserList(data.users);
+        })
+        .catch(error => console.error('Error fetching users:', error));
+    }
+  }, [show]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -62,9 +71,9 @@ function CreateBoardModal({ show, onClose, onCreate }) {
           <input type="text" placeholder="Search users" value={search} onChange={handleSearch} />
           <ul className="user-list">
             {userList
-              .filter(user => user.username.includes(search))
+              .filter(user => user.username.toLowerCase().includes(search.toLowerCase()))
               .map(user => (
-                <li key={user.username} onClick={() => handleAddMember(user.username)}>
+                <li key={user.id} onClick={() => handleAddMember(user.username)}>
                   {user.username}
                 </li>
               ))}

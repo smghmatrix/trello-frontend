@@ -57,22 +57,20 @@ function Signup() {
       // Adding additional fields for testing
       const payload = {
         ...formData,
-        id: 0,
-        date_joined: new Date().toISOString(),
-        updated_at: new Date().toISOString()
       };
 
-      fetch(`${process.env.REACT_APP_API_URL}/users`, {  // Use environment variable here
+      fetch(`${process.env.REACT_APP_API_URL}/users/`, {  // Use environment variable here
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
         },
         body: JSON.stringify(payload)
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            toast.success('Signup successful! Please log in.', {
+      .then(response => response.json().then(data => ({ status: response.status, body: data })))
+      .then(({ status, body }) => {
+          if (status === 200) {
+            toast.success(`Signup successful! Please log in ${formData.username}`, {
               position: "top-right",
               autoClose: 3000, 
               hideProgressBar: false,
@@ -82,8 +80,9 @@ function Signup() {
               progress: undefined,
               className: 'Toastify__toast--success',
             });
+
           } else {
-            toast.error(data.message || 'Signup failed. Please try again.', {
+            toast.error(`${body}`, {
               position: "top-right",
               autoClose: 3000, 
               hideProgressBar: false,
