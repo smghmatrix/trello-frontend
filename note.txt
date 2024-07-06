@@ -1,3 +1,2 @@
 export NODE_OPTIONS=--openssl-legacy-provider --------------> ssl error
 
-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
