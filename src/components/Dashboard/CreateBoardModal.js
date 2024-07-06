@@ -37,17 +37,57 @@ function CreateBoardModal({ show, onClose, onCreate }) {
   };
 
   const handleCreateBoard = () => {
-    onCreate({ title, description, members });
-    toast.success('Board created successfully!', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    onClose();
+    const payload = {
+      name: title,
+      description: description,
+      users: members
+    };
+
+    fetch(`${process.env.REACT_APP_API_URL}/workspaces/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status === 201) {
+          toast.success('Board created successfully!', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          onCreate({ title, description, members });
+        } else {
+          toast.error(body, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        toast.error('An error occurred. Please try again.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
   };
 
   if (!show) {
