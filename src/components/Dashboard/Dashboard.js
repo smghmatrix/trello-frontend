@@ -1,36 +1,7 @@
-// src/components/Dashboard.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar'; // Import Navbar component
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import CSS for styling
-
-const workspaceData = [
-  {
-    "id": 1,
-    "name": "Workspace 1",
-    "date": "2022/04/12"
-  },
-  {
-    "id": 2,
-    "name": "Workspace 2",
-    "date": "2022/04/12"
-  },
-  {
-    "id": 3,
-    "name": "Workspace 3",
-    "date": "2022/04/12"
-  },
-  {
-    "id": 6,
-    "name": "Workspace 4",
-    "date": "2022/04/12"
-  },
-  
-
- 
-  
-];
 
 const taskData = [
   {
@@ -54,27 +25,30 @@ const taskData = [
     "date": "2022/04/12"
   },
   {
-    "id": 4,
-    "name": "Task 4",
-    "date": "2022/04/12"
-  },
-  {
-    "id": 4,
-    "name": "Task 4",
-    "date": "2022/04/12"
-  },
-  {
-    "id": 4,
-    "name": "Task 4",
+    "id": 5,
+    "name": "Task 5",
     "date": "2022/04/12"
   },
 ];
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [workspaces, setWorkspaces] = useState(workspaceData);
+  const [workspaces, setWorkspaces] = useState([]);
   const [tasks, setTasks] = useState(taskData);
 
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/workspaces/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setWorkspaces(data.results);
+      })
+      .catch(error => console.error('Error fetching workspaces:', error));
+  }, []);
 
   const viewBoard = (workspaceId) => {
     navigate(`/board/${workspaceId}`);
@@ -89,7 +63,7 @@ function Dashboard() {
           <ul>
             {workspaces.map((workspace) => (
               <li key={workspace.id}>
-                {workspace.name} &nbsp; {workspace.date}
+                {workspace.name} &nbsp; {new Date(workspace.created_at).toLocaleDateString()}
               </li>
             ))}
           </ul>
