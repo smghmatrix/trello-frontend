@@ -105,14 +105,14 @@
   background: #5900ff;
 }
 
-.modal-content {
+.modal-content2 {
   background: white;
   padding: 20px;
   border-radius: 5px;
   width: 400px;
 }
 
-.modal {
+.modal-createTask {
   position: fixed;
   top: 0;
   left: 0;

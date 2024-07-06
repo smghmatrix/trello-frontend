@@ -6,6 +6,8 @@ import '../Auth.css';
 
 function Signup() {
   const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
     username: '',
     email: '',
     password: ''
@@ -25,6 +27,14 @@ function Signup() {
     let validationErrors = {};
     const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
 
+    if (!formData.first_name) {
+      validationErrors.first_name = "First name is required";
+    }
+
+    if (!formData.last_name) {
+      validationErrors.last_name = "Last name is required";
+    }
+
     if (!formData.username) {
       validationErrors.username = "Username is required";
     }
@@ -43,12 +53,21 @@ function Signup() {
       setErrors(validationErrors); 
     } else {
       setErrors({});
-      fetch('https://your-api-endpoint/signup', {
+      
+      // Adding additional fields for testing
+      const payload = {
+        ...formData,
+        id: 0,
+        date_joined: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      fetch(`${process.env.REACT_APP_API_URL}/users`, {  // Use environment variable here
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       })
         .then(response => response.json())
         .then(data => {
@@ -64,7 +83,7 @@ function Signup() {
               className: 'Toastify__toast--success',
             });
           } else {
-            toast.error('Signup failed. Please try again.', {
+            toast.error(data.message || 'Signup failed. Please try again.', {
               position: "top-right",
               autoClose: 3000, 
               hideProgressBar: false,
@@ -97,6 +116,28 @@ function Signup() {
       <ToastContainer />
       <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>First Name:</label>
+          <input 
+            type="text" 
+            name="first_name" 
+            value={formData.first_name} 
+            onChange={handleChange} 
+            className={errors.first_name ? 'error-input' : ''}
+          />
+          {errors.first_name && <p className="error">{errors.first_name}</p>}
+        </div>
+        <div className="form-group">
+          <label>Last Name:</label>
+          <input 
+            type="text" 
+            name="last_name" 
+            value={formData.last_name} 
+            onChange={handleChange} 
+            className={errors.last_name ? 'error-input' : ''}
+          />
+          {errors.last_name && <p className="error">{errors.last_name}</p>}
+        </div>
         <div className="form-group">
           <label>Username:</label>
           <input 

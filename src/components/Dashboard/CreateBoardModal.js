@@ -47,7 +47,7 @@ function CreateBoardModal({ show, onClose, onCreate }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className="modal-create-board">
         <ToastContainer />
         <button className="close-button2" onClick={onClose}>X</button>
         <h2>Create Board</h2>

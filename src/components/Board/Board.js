@@ -198,8 +198,8 @@ function Board() {
 
 
       {showMembersModal && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-createTask">
+          <div className="modal-content2">
             <h2>Members</h2>
             <ul>
               {workspace.members.map(member => (
@@ -212,8 +212,8 @@ function Board() {
       )}
 
       {showAddMemberModal && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-createTask">
+          <div className="modal-content2">
             <h2>Add Member</h2>
             <form onSubmit={handleAddMember}>
               <input type="text" name="newMember" placeholder="Username" required />
@@ -225,8 +225,8 @@ function Board() {
       )}
       
       {showEditTaskModal && (
-  <div className="modal">
-    <div className="modal-content">
+  <div className="modal-createTask">
+    <div className="modal-content2">
       <h2>Edit Task</h2>
       <form onSubmit={handleUpdateTask}>
         <input type="text" name="title" placeholder="Title" value={currentTask.title} onChange={handleEditInputChange} required />
@@ -244,8 +244,8 @@ function Board() {
 
 
       {showAddTaskModal && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-createTask">
+          <div className="modal-content2">
             <h2>Add Task</h2>
             <form onSubmit={handleAddTask}>
               <input type="text" name="title" placeholder="Title" value={newTask.title} onChange={handleTaskInputChange} required />

@@ -10,7 +10,7 @@ function Modal({ show, onClose, task }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className="modal2">
         <button className="close-button" onClick={onClose}>X</button>
         <h2>{task.title}</h2>
         <p><strong>Description:</strong> {task.description}</p>
