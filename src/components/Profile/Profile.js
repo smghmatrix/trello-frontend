@@ -5,6 +5,7 @@ import Navbar from '../Dashboard/Navbar'; // Import the main Navbar component
 import './Profile.css'; // Import the CSS for the profile page
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { json } from 'react-router-dom';
 
 const USER_ID = 1; // Static ID for testing purposes
 
@@ -51,34 +52,20 @@ function Profile() {
   };
 
   const handleProfilePictureChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result); // base64 encoded string
-      };
-      reader.readAsDataURL(file);
-    }
+    setProfilePicture(e.target.files[0]);
   };
 
   const handleBannerChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBanner(reader.result); // base64 encoded string
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    setBanner(e.target.files[0]);
+  };  
 
   const handleSave = () => {
     const updatedUserData = {
       username: userData.username,
       email: userData.email,
       bio: userData.bio,
-      avatar: profilePicture || null,
-      banner: banner || null,
+      avatar: profilePicture ? URL.createObjectURL(profilePicture) : '',
+      banner: banner ? URL.createObjectURL(banner) : '',
     };
 
     fetch(`${process.env.REACT_APP_API_URL}/users/${USER_ID}/`, {
@@ -91,7 +78,7 @@ function Profile() {
     })
     .then(response => response.json().then(data => ({ status: response.status, body: data })))
     .then(({ status, body }) => {
-      if (status === 200) {
+        if (status === 200) {
         toast.success('Profile updated successfully!', {
           position: "top-right",
           autoClose: 3000,
@@ -101,8 +88,9 @@ function Profile() {
           draggable: true,
           progress: undefined,
         });
-      } else {
-        toast.error(JSON.stringify(body), {
+      }
+      else{
+        toast.error(json.stringify(body), {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -112,19 +100,19 @@ function Profile() {
           progress: undefined,
         });
       }
-    })
-    .catch(error => {
-      console.error('Error updating profile:', error);
-      toast.error('An error occurred. Please try again.', {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+  })
+      .catch(error => {
+        console.error('Error updating profile:', error);
+        toast.error('An error occurred. Please try again.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
-    });
   };
 
   const handleNewPasswordChange = (e) => {

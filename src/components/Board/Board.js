@@ -220,7 +220,8 @@ function Board() {
       due_date: newTask.due_date,
       priority: newTask.priority,
       workspace: workspaceId, // Ensure workspace ID is included
-      assignee: newTask.assignee // Ensure assignee ID is included
+      assignee: newTask.assignee,// Ensure assignee ID is included
+      image_url: newTask.photo
     };
   
     fetch(`${process.env.REACT_APP_API_URL}/workspaces/${workspaceId}/tasks/`, {
