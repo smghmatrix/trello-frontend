@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 function Board() {
   const { workspaceId } = useParams();
   const [tasks, setTasks] = useState([]);
-  const [workspace, setWorkspace] = useState({ name: '', description: '', members: [], isAdmin: false });
+  const [workspace, setWorkspace] = useState({ name: '', description: '', members: [], isAdmin: true });
   const [showEditTaskModal, setShowEditTaskModal] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
   const [showMembersModal, setShowMembersModal] = useState(false);
@@ -35,7 +35,7 @@ function Board() {
           name: data.name,
           description: data.description,
           members: data.users,
-          isAdmin: data.isAdmin,
+          isAdmin: true,
         });
       })
       .catch(error => console.error('Error fetching workspace:', error));
@@ -69,13 +69,22 @@ function Board() {
       return;
     }
 
-    const draggedTask = tasks.find(task => task.id === draggableId);
-    draggedTask.status = destination.droppableId;
+    const newTasks = Array.from(tasks);
+    const [movedTask] = newTasks.splice(source.index, 1);
+    movedTask.status = destination.droppableId;
+    newTasks.splice(destination.index, 0, movedTask);
 
-    const updatedTasks = tasks.filter(task => task.id !== draggableId);
-    updatedTasks.splice(destination.index, 0, draggedTask);
+    setTasks(newTasks);
 
-    setTasks(updatedTasks);
+    // Optionally update the task status in the backend
+    fetch(`${process.env.REACT_APP_API_URL}/workspaces/${workspaceId}/tasks/${currentTask.id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify({ status: destination.droppableId }),
+    }).catch(error => console.error('Error updating task status:', error));
   };
 
   const handleEditTask = (task) => {
@@ -99,11 +108,11 @@ function Board() {
     });
   };
 
-  const handleAddMember = (username) => {
-    if (!workspace.members.includes(username)) {
+  const handleAddMember = (member) => {
+    if (!workspace.members.some(m => m.id === member.id)) {
       setWorkspace({
         ...workspace,
-        members: [...workspace.members, username]
+        members: [...workspace.members, member]
       });
       toast.success('Member added successfully!', {
         position: "top-right",
@@ -127,22 +136,72 @@ function Board() {
       });
     }
   };
+  
 
   const handleUpdateTask = (e) => {
     e.preventDefault();
-    const updatedTasks = tasks.map(task => task.id === currentTask.id ? currentTask : task);
-    setTasks(updatedTasks);
-    toast.success('Task updated successfully!', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+  
+    const updatedTaskData = {
+      title: currentTask.title,
+      description: currentTask.description,
+      status: currentTask.status,
+      estimated_time: currentTask.estimated_time,
+      actual_time: currentTask.actual_time,
+      due_date: currentTask.due_date,
+      priority: currentTask.priority,
+      workspace: workspaceId,
+      assignee: currentTask.assignee,
+    };
+  
+    fetch(`${process.env.REACT_APP_API_URL}/workspaces/${workspaceId}/tasks/${currentTask.id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: JSON.stringify(updatedTaskData),
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+      if (status === 200) {
+        setTasks(tasks.map(task => task.id === currentTask.id ? body : task));
+        toast.success('Task updated successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error(`Error: ${JSON.stringify(body)}`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error updating task:', error);
+      toast.error('An error occurred. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
+  
     setShowEditTaskModal(false);
   };
+  
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
@@ -273,102 +332,105 @@ function Board() {
       </DragDropContext>
   
       {showMembersModal && (
-        <div className="modal-createTask">
-          <div className="modal-content2">
-            <h2>Members</h2>
-            <ul>
-              {workspace.members.map(member => (
-                <li key={member}>{member}</li>
-              ))}
-            </ul>
-            <button onClick={() => setShowMembersModal(false)}>Close</button>
-          </div>
-        </div>
-      )}
-  
-      {showAddMemberModal && (
-        <div className="modal-createTask">
-          <div className="modal-content2">
-            <h2>Add Member</h2>
-            <input 
-              type="text" 
-              placeholder="Search users" 
-              value={search} 
-              onChange={(e) => setSearch(e.target.value)} 
-            />
-            <ul className="user-list">
-              {userList
-                .filter(user => user.username.toLowerCase().includes(search.toLowerCase()))
-                .map(user => (
-                  <li key={user.id} onClick={() => handleAddMember(user.username)}>
-                    {user.username}
-                  </li>
-                ))}
-            </ul>
-            <button onClick={() => setShowAddMemberModal(false)}>Close</button>
-          </div>
-        </div>
-      )}
-  
-  {showEditTaskModal && (
   <div className="modal-createTask">
     <div className="modal-content2">
-      <h2>Edit Task</h2>
-      <form onSubmit={handleUpdateTask}>
-        <input type="text" name="title" placeholder="Title" value={currentTask.title} onChange={handleEditInputChange} required />
-        <textarea name="description" placeholder="Description" value={currentTask.description} onChange={handleEditInputChange} />
-        <select name="status" value={currentTask.status} onChange={handleEditInputChange}>
-          <option value="Planned">Planned</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-        <input type="time" name="estimated_time" placeholder="Estimated Time" value={currentTask.estimated_time} onChange={handleEditInputChange} />
-        <input type="time" name="actual_time" placeholder="Actual Time" value={currentTask.actual_time} onChange={handleEditInputChange} />
-        <input type="date" name="due_date" placeholder="Due Date" value={currentTask.due_date} onChange={handleEditInputChange} />
-        <select name="priority" value={currentTask.priority} onChange={handleEditInputChange}>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-        <input type="file" name="image_url" onChange={(e) => setCurrentTask({ ...currentTask, image_url: URL.createObjectURL(e.target.files[0]) })} />
-        <input type="text" name="assignee_username" placeholder="Assignee Username" value={currentTask.assignee_username} onChange={handleEditInputChange} readOnly />
-        <button type="submit">Update Task</button>
-      </form>
-      <button onClick={() => setShowEditTaskModal(false)}>Close</button>
-    </div>
-  </div>
-)}
-  
-  {showAddTaskModal && (
-  <div className="modal-createTask">
-    <div className="modal-content2">
-      <h2>Add Task</h2>
-      <form onSubmit={handleAddTask}>
-        <input type="text" name="title" placeholder="Title" value={newTask.title} onChange={handleTaskInputChange} required />
-        <textarea name="description" placeholder="Description" value={newTask.description} onChange={handleTaskInputChange}></textarea>
-        <select name="status" value={newTask.status} onChange={handleTaskInputChange} required>
-          <option value="Planned">Planned</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-        <input type="time" name="estimated_time" placeholder="Estimated Time" value={newTask.estimated_time} onChange={handleTaskInputChange} />
-        <input type="time" name="actual_time" placeholder="Actual Time" value={newTask.actual_time} onChange={handleTaskInputChange} />
-        <input type="date" name="due_date" placeholder="Due Date" value={newTask.due_date} onChange={handleTaskInputChange} />
-        <select name="priority" value={newTask.priority} onChange={handleTaskInputChange}>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-        <input type="text" name="assignee" placeholder="Assignee" value={newTask.assignee} onChange={handleTaskInputChange} />
-        <button type="submit">Add Task</button>
-      </form>
-      <button onClick={() => setShowAddTaskModal(false)}>Close</button>
+      <h2>Members</h2>
+      <ul>
+        {workspace.members.map(member => (
+          <li key={member.id}>
+            {member.username} (ID: {member.id})
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => setShowMembersModal(false)}>Close</button>
     </div>
   </div>
 )}
 
+{showAddMemberModal && (
+  <div className="modal-createTask">
+    <div className="modal-content2">
+      <h2>Add Member</h2>
+      <input 
+        type="text" 
+        placeholder="Search users" 
+        value={search} 
+        onChange={(e) => setSearch(e.target.value)} 
+      />
+      <ul className="user-list">
+        {userList
+          .filter(user => user.username.toLowerCase().includes(search.toLowerCase()))
+          .map(user => (
+            <li key={user.id} onClick={() => handleAddMember(user)}>
+              {user.username}
+            </li>
+          ))}
+      </ul>
+      <button onClick={() => setShowAddMemberModal(false)}>Close</button>
+    </div>
+  </div>
+)}
+
+  
+      {showEditTaskModal && (
+        <div className="modal-createTask">
+          <div className="modal-content2">
+            <h2>Edit Task</h2>
+            <form onSubmit={handleUpdateTask}>
+              <input type="text" name="title" placeholder="Title" value={currentTask.title} onChange={handleEditInputChange} required />
+              <textarea name="description" placeholder="Description" value={currentTask.description} onChange={handleEditInputChange}></textarea>
+              <select name="status" value={currentTask.status} onChange={handleEditInputChange} required>
+                <option value="Planned">Planned</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <input type="time" name="estimated_time" placeholder="Estimated Time" value={currentTask.estimated_time} onChange={handleEditInputChange} />
+              <input type="time" name="actual_time" placeholder="Actual Time" value={currentTask.actual_time} onChange={handleEditInputChange} />
+              <input type="date" name="due_date" placeholder="Due Date" value={currentTask.due_date} onChange={handleEditInputChange} />
+              <select name="priority" value={currentTask.priority} onChange={handleEditInputChange}>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+              <input type="text" name="assignee" placeholder="Assignee" value={currentTask.assignee} onChange={handleEditInputChange} />
+              <input type="file" name="photo" onChange={(e) => setCurrentTask({ ...currentTask, photo: URL.createObjectURL(e.target.files[0]) })} />
+              <button type="submit">Update Task</button>
+            </form>
+            <button onClick={() => setShowEditTaskModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
+  
+      {showAddTaskModal && (
+        <div className="modal-createTask">
+          <div className="modal-content2">
+            <h2>Add Task</h2>
+            <form onSubmit={handleAddTask}>
+              <input type="text" name="title" placeholder="Title" value={newTask.title} onChange={handleTaskInputChange} required />
+              <textarea name="description" placeholder="Description" value={newTask.description} onChange={handleTaskInputChange}></textarea>
+              <select name="status" value={newTask.status} onChange={handleTaskInputChange} required>
+                <option value="Planned">Planned</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <input type="time" name="estimated_time" placeholder="Estimated Time" value={newTask.estimated_time} onChange={handleTaskInputChange} />
+              <input type="time" name="actual_time" placeholder="Actual Time" value={newTask.actual_time} onChange={handleTaskInputChange} />
+              <input type="date" name="due_date" placeholder="Due Date" value={newTask.due_date} onChange={handleTaskInputChange} />
+              <select name="priority" value={newTask.priority} onChange={handleTaskInputChange}>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+              <input type="text" name="assignee" placeholder="Assignee" value={newTask.assignee} onChange={handleTaskInputChange} />
+              <button type="submit">Add Task</button>
+            </form>
+            <button onClick={() => setShowAddTaskModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
   
-export default Board;
+}
+  export default Board;
+  
