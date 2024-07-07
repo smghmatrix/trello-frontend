@@ -109,7 +109,7 @@ function Board() {
   };
 
   const handleAddMember = (member) => {
-    if (!workspace.members.some(m => m.id === member.id)) {
+    if (!workspace.members.some(m => m.id === member.user)) {
       setWorkspace({
         ...workspace,
         members: [...workspace.members, member]
@@ -207,6 +207,53 @@ function Board() {
     const { name, value } = e.target;
     setCurrentTask({ ...currentTask, [name]: value });
   };
+
+  const handleDeleteTask = (taskId) => {
+    fetch(`${process.env.REACT_APP_API_URL}/workspaces/${workspaceId}/tasks/${taskId}/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+    })
+    .then(response => {
+      if (response.status === 204) {
+        setTasks(tasks.filter(task => task.id !== taskId));
+        toast.success('Task deleted successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error('Failed to delete task. Please try again.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting task:', error);
+      toast.error('An error occurred. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  };
+  
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -314,8 +361,12 @@ function Board() {
                         >
                           <h3>{task.title}</h3>
                           <p><strong>Assignee:</strong> {task.assignee_username}</p>
+                          <p><strong>priority:</strong> {task.priority}</p>
                           {task.photo && <img src={task.photo} alt="Task" />}
+                          <div>
                           <button className="edit-task-button" onClick={() => handleEditTask(task)}>Edit</button>
+                          <button className="edit-task-button" onClick={() => handleDeleteTask(task.id)}>Delete</button>
+                          </div>
                         </div>
                       )}
                     </Draggable>
@@ -333,45 +384,44 @@ function Board() {
       </DragDropContext>
   
       {showMembersModal && (
-  <div className="modal-createTask">
-    <div className="modal-content2">
-      <h2>Members</h2>
-      <ul>
-        {workspace.members.map(member => (
-          <li key={member.id}>
-            {member.username} (ID: {member.id})
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => setShowMembersModal(false)}>Close</button>
-    </div>
-  </div>
-)}
-
-{showAddMemberModal && (
-  <div className="modal-createTask">
-    <div className="modal-content2">
-      <h2>Add Member</h2>
-      <input 
-        type="text" 
-        placeholder="Search users" 
-        value={search} 
-        onChange={(e) => setSearch(e.target.value)} 
-      />
-      <ul className="user-list">
-        {userList
-          .filter(user => user.username.toLowerCase().includes(search.toLowerCase()))
-          .map(user => (
-            <li key={user.id} onClick={() => handleAddMember(user)}>
-              {user.username}
-            </li>
-          ))}
-      </ul>
-      <button onClick={() => setShowAddMemberModal(false)}>Close</button>
-    </div>
-  </div>
-)}
-
+        <div className="modal-createTask">
+          <div className="modal-content2">
+            <h2>Members</h2>
+            <ul>
+              {workspace.members.map(member => (
+                <li key={member.user}>
+                  {member.username} (ID: {member.id})
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setShowMembersModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
+  
+      {showAddMemberModal && (
+        <div className="modal-createTask">
+          <div className="modal-content2">
+            <h2>Add Member</h2>
+            <input 
+              type="text" 
+              placeholder="Search users" 
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)} 
+            />
+            <ul className="user-list">
+              {userList
+                .filter(user => user.username.toLowerCase().includes(search.toLowerCase()))
+                .map(user => (
+                  <li key={user.user} onClick={() => handleAddMember(user)}>
+                    {user.username} 
+                  </li>
+                ))}
+            </ul>
+            <button onClick={() => setShowAddMemberModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
   
       {showEditTaskModal && (
         <div className="modal-createTask">
@@ -423,6 +473,7 @@ function Board() {
                 <option value="High">High</option>
               </select>
               <input type="text" name="assignee" placeholder="Assignee" value={newTask.assignee} onChange={handleTaskInputChange} />
+              <input type="file" name="photo" onChange={(e) => setNewTask({ ...newTask, photo: URL.createObjectURL(e.target.files[0]) })} />
               <button type="submit">Add Task</button>
             </form>
             <button onClick={() => setShowAddTaskModal(false)}>Close</button>
@@ -431,6 +482,7 @@ function Board() {
       )}
     </div>
   );
+  
   
 }
   export default Board;
