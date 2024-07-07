@@ -69,7 +69,7 @@ function Signup() {
       })
       .then(response => response.json().then(data => ({ status: response.status, body: data })))
       .then(({ status, body }) => {
-          if (status === 200) {
+          if (status === 201) {
             toast.success(`Signup successful! Please log in ${formData.username}`, {
               position: "top-right",
               autoClose: 3000, 
@@ -82,7 +82,7 @@ function Signup() {
             });
 
           } else {
-            toast.error(`${body}`, {
+            toast.error(JSON.stringify(body), {
               position: "top-right",
               autoClose: 3000, 
               hideProgressBar: false,

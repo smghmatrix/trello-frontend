@@ -133,6 +133,12 @@
   color: rgb(240, 240, 240);
 }
 
+.board-header p{
+  margin-top: 10px;
+  margin-bottom: -50px;
+  margin-left: -1300px;
+}
+
 .edit-task-button {
   background: #000000;
   border: none;
