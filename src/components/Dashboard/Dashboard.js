@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar'; // Import Navbar component
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Import CSS for styling
+import { ToastContainer, toast } from 'react-toastify';
 
 const taskData = [
   {
@@ -54,9 +55,57 @@ function Dashboard() {
     navigate(`/board/${workspaceId}`);
   };
 
+  const removeWorkspace = (workspaceId) => {
+    fetch(`${process.env.REACT_APP_API_URL}/workspaces/${workspaceId}/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+    })
+    .then(response => {
+      if (response.status === 204) {
+        setWorkspaces(workspaces.filter(workspace => workspace.id !== workspaceId));
+        toast.success('Workspace removed successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error('Failed to remove workspace. You do not have access to do this', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error removing workspace:', error);
+      toast.error('An error occurred. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  };
+  
+
   return (
     <div className="dashboard-container">
       <Navbar />
+      <ToastContainer />
       <div className="content-columns">
         <div className="sidebar">
           <h2>Workspaces List</h2>
@@ -75,7 +124,7 @@ function Dashboard() {
               <div key={workspace.id} className="workspace-card">
                 <div className="title-workspace">{workspace.name}</div>
                 <button onClick={() => viewBoard(workspace.id)}>Views</button>
-                <button>Tasks</button>
+                <button onClick={() => removeWorkspace(workspace.id)}>Remove</button>
                 <button>Members</button>
                 <button>Leave</button>
               </div>
